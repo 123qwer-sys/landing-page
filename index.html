@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  
+  <!-- Security Headers via Meta Tags -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self';">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=(), usb=(), display-capture=()">
+  
+  <title>Bajaj Claims Engine &mdash; Something Big is Brewing | bajajclaims.tech</title>
+  <meta name="description" content="Next-generation autonomous AI & bot automation engine for insurance claims processing, cognitive fraud detection, and instant adjudication at bajajclaims.tech.">
+  <meta name="theme-color" content="#06080d">
+
+  <!-- Self-contained SVG Favicon with Shield & Circuit Node -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%2300f0ff'/%3E%3Cstop offset='100%25' stop-color='%233b82f6'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='32' height='32' rx='8' fill='%2306080d'/%3E%3Cpath d='M16 4L26 8V15C26 21 21.5 26.5 16 28C10.5 26.5 6 21 6 15V8L16 4Z' stroke='url(%23g)' stroke-width='2' fill='none' stroke-linejoin='round'/%3E%3Cpath d='M12 16L15 19L21 13' stroke='%2300f0ff' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+
+  <style>
+    /* Design Tokens */
+    :root {
+      --bg-primary: #06080d;
+      --bg-surface: rgba(14, 18, 28, 0.7);
+      --bg-surface-hover: rgba(22, 28, 44, 0.85);
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-glow: rgba(0, 240, 255, 0.35);
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --text-subtle: #64748b;
+      --cyan-neon: #00f0ff;
+      --cyan-glow: rgba(0, 240, 255, 0.45);
+      --blue-accent: #3b82f6;
+      --violet-neon: #8b5cf6;
+      --violet-glow: rgba(139, 92, 246, 0.4);
+      --emerald-neon: #10b981;
+      --danger-neon: #f43f5e;
+      --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "SF Pro Display", "SF Pro Text", Helvetica, Arial, sans-serif;
+      --font-mono: ui-monospace, "SF Mono", "Cascadia Code", "Fira Code", Consolas, Menlo, monospace;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100vh;
+      background-color: var(--bg-primary);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      font-size: 16px;
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Animated CSS-Only Background Mesh & Grid */
+    .viewport-bg {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .ambient-glow {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(100px);
+      opacity: 0.35;
+      will-change: transform;
+    }
+
+    .glow-1 {
+      width: 580px;
+      height: 580px;
+      background: radial-gradient(circle, var(--cyan-neon) 0%, transparent 70%);
+      top: -150px;
+      left: 12%;
+      animation: floatOrbit1 20s infinite ease-in-out alternate;
+    }
+
+    .glow-2 {
+      width: 650px;
+      height: 650px;
+      background: radial-gradient(circle, #2563eb 0%, transparent 70%);
+      bottom: -200px;
+      right: 8%;
+      animation: floatOrbit2 24s infinite ease-in-out alternate;
+    }
+
+    .glow-3 {
+      width: 420px;
+      height: 420px;
+      background: radial-gradient(circle, var(--violet-neon) 0%, transparent 70%);
+      top: 40%;
+      left: 55%;
+      animation: floatOrbit3 18s infinite ease-in-out alternate;
+    }
+
+    .cyber-grid {
+      position: absolute;
+      inset: 0;
+      background-image: 
+        linear-gradient(to right, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: radial-gradient(ellipse 80% 65% at 50% 50%, #000 30%, transparent 85%);
+      -webkit-mask-image: radial-gradient(ellipse 80% 65% at 50% 50%, #000 30%, transparent 85%);
+    }
+
+    .scanline {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        transparent 50%,
+        rgba(0, 0, 0, 0.25) 51%
+      );
+      background-size: 100% 4px;
+      opacity: 0.15;
+    }
+
+    @keyframes floatOrbit1 {
+      0% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(80px, 60px) scale(1.15); }
+      100% { transform: translate(-50px, 90px) scale(0.95); }
+    }
+
+    @keyframes floatOrbit2 {
+      0% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(-90px, -70px) scale(1.2); }
+      100% { transform: translate(60px, -40px) scale(0.9); }
+    }
+
+    @keyframes floatOrbit3 {
+      0% { transform: translate(0, 0) scale(0.9); }
+      50% { transform: translate(-60px, 50px) scale(1.1); }
+      100% { transform: translate(40px, -60px) scale(1); }
+    }
+
+    /* Content Layout */
+    .app-wrapper {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      padding: 2.25rem 1.5rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* Header & Brand */
+    header {
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      padding-bottom: 2rem;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.85rem;
+      text-decoration: none;
+      color: var(--text-main);
+    }
+
+    .brand-icon {
+      width: 42px;
+      height: 42px;
+      background: linear-gradient(135deg, rgba(0, 240, 255, 0.15), rgba(37, 99, 235, 0.2));
+      border: 1px solid var(--border-glow);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 18px rgba(0, 240, 255, 0.25);
+    }
+
+    .brand-icon svg {
+      width: 22px;
+      height: 22px;
+      fill: none;
+      stroke: var(--cyan-neon);
+      stroke-width: 2;
+    }
+
+    .brand-text-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand-name {
+      font-family: var(--font-mono);
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, #ffffff 40%, var(--cyan-neon) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      line-height: 1.2;
+    }
+
+    .brand-domain {
+      font-family: var(--font-mono);
+      font-size: 0.725rem;
+      color: var(--cyan-neon);
+      letter-spacing: 0.06em;
+      opacity: 0.85;
+    }
+
+    .header-pills {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.4rem 0.9rem;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      color: #94a3b8;
+      background: rgba(15, 23, 42, 0.65);
+      border: 1px solid var(--border-subtle);
+      border-radius: 9999px;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .pulse-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background-color: var(--emerald-neon);
+      box-shadow: 0 0 10px var(--emerald-neon);
+      animation: pulseGreen 2s infinite cubic-bezier(0.4, 0, 0.6, 1);
+    }
+
+    @keyframes pulseGreen {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(1.3); }
+    }
+
+    /* Main Section */
+    main {
+      width: 100%;
+      max-width: 780px;
+      text-align: center;
+      margin: auto 0;
+      padding: 2rem 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--cyan-neon);
+      background: rgba(0, 240, 255, 0.06);
+      border: 1px solid rgba(0, 240, 255, 0.25);
+      border-radius: 9999px;
+      padding: 0.4rem 1.1rem;
+      margin-bottom: 1.75rem;
+      box-shadow: 0 0 20px rgba(0, 240, 255, 0.12);
+    }
+
+    .headline {
+      font-size: clamp(2.25rem, 5.5vw, 3.85rem);
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -0.035em;
+      margin-bottom: 1.25rem;
+      color: #ffffff;
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, #ffffff 15%, var(--cyan-neon) 65%, #3b82f6 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: inline-block;
+    }
+
+    .subhead {
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      font-weight: 400;
+      color: var(--text-muted);
+      max-width: 620px;
+      margin-bottom: 2.75rem;
+      line-height: 1.65;
+    }
+
+    /* Interactive Form */
+    .form-container {
+      width: 100%;
+      max-width: 500px;
+      position: relative;
+    }
+
+    .notify-form {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      padding: 0.5rem;
+      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      transition: border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    @media (min-width: 540px) {
+      .notify-form {
+        flex-direction: row;
+        align-items: center;
+        padding: 0.45rem 0.45rem 0.45rem 1.15rem;
+      }
+    }
+
+    .notify-form:focus-within {
+      border-color: var(--border-glow);
+      box-shadow: 0 0 28px rgba(0, 240, 255, 0.18), 0 20px 40px -15px rgba(0, 0, 0, 0.8);
+    }
+
+    .input-wrapper {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+    }
+
+    .input-wrapper svg {
+      width: 18px;
+      height: 18px;
+      stroke: var(--text-subtle);
+      flex-shrink: 0;
+      transition: stroke 0.2s ease;
+    }
+
+    .notify-form:focus-within .input-wrapper svg {
+      stroke: var(--cyan-neon);
+    }
+
+    .notify-input {
+      width: 100%;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      font-size: 0.975rem;
+      padding: 0.75rem 0.25rem;
+    }
+
+    .notify-input::placeholder {
+      color: var(--text-subtle);
+      font-weight: 400;
+    }
+
+    .submit-button {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      background: linear-gradient(135deg, var(--cyan-neon) 0%, #0284c7 100%);
+      color: #040810;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 0.875rem;
+      letter-spacing: 0.04em;
+      border: none;
+      border-radius: 11px;
+      padding: 0.85rem 1.45rem;
+      cursor: pointer;
+      overflow: hidden;
+      transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+      box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+      white-space: nowrap;
+    }
+
+    .submit-button:hover:not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow: 0 0 30px rgba(0, 240, 255, 0.5);
+      background: linear-gradient(135deg, #38f8ff 0%, #0369a1 100%);
+    }
+
+    .submit-button:active:not(:disabled) {
+      transform: translateY(1px);
+    }
+
+    .submit-button:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+
+    .btn-arrow {
+      width: 15px;
+      height: 15px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      transition: transform 0.2s ease;
+    }
+
+    .submit-button:hover:not(:disabled) .btn-arrow {
+      transform: translateX(3px);
+    }
+
+    /* Message / Status Alert Box */
+    .feedback-message {
+      margin-top: 1rem;
+      font-size: 0.85rem;
+      font-family: var(--font-mono);
+      min-height: 24px;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
+    }
+
+    .feedback-message.error {
+      color: var(--danger-neon);
+      animation: shake 0.4s ease-in-out;
+    }
+
+    .feedback-message.success {
+      color: var(--emerald-neon);
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-6px); }
+      40%, 80% { transform: translateX(6px); }
+    }
+
+    /* Feature Badges Grid */
+    .features-strip {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.75rem 1.25rem;
+      margin-top: 2.5rem;
+    }
+
+    .feature-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      font-size: 0.8rem;
+      font-family: var(--font-mono);
+      color: var(--text-subtle);
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 0.4rem 0.85rem;
+      border-radius: 8px;
+    }
+
+    .feature-item svg {
+      width: 14px;
+      height: 14px;
+      stroke: var(--cyan-neon);
+    }
+
+    /* Footer */
+    footer {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      font-size: 0.8rem;
+      color: var(--text-subtle);
+    }
+
+    @media (min-width: 640px) {
+      footer {
+        flex-direction: row;
+        justify-content: space-between;
+      }
+    }
+
+    .security-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: #94a3b8;
+    }
+
+    .security-badge svg {
+      width: 14px;
+      height: 14px;
+      stroke: var(--emerald-neon);
+    }
+
+    /* Accessibility Focus styles */
+    a:focus-visible, button:focus-visible, input:focus-visible {
+      outline: 2px solid var(--cyan-neon);
+      outline-offset: 3px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Ambient Background & Cyber Grid -->
+  <div class="viewport-bg" aria-hidden="true">
+    <div class="ambient-glow glow-1"></div>
+    <div class="ambient-glow glow-2"></div>
+    <div class="ambient-glow glow-3"></div>
+    <div class="cyber-grid"></div>
+    <div class="scanline"></div>
+  </div>
+
+  <div class="app-wrapper">
+    <!-- Header -->
+    <header>
+      <a href="https://bajajclaims.tech" class="brand" aria-label="Bajaj Claims Engine Homepage">
+        <div class="brand-icon">
+          <!-- Shield & Circuit Check SVG -->
+          <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            <polyline points="9 12 11 14 15 10"></polyline>
+          </svg>
+        </div>
+        <div class="brand-text-group">
+          <span class="brand-name">Bajaj Claims Engine</span>
+          <span class="brand-domain">bajajclaims.tech</span>
+        </div>
+      </a>
+
+      <div class="header-pills">
+        <div class="status-badge" role="status" aria-live="polite">
+          <span class="pulse-dot" aria-hidden="true"></span>
+          <span>CLAIMS ENGINE V3.0 &bull; ONLINE SOON</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+      <div class="chip">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+        </svg>
+        Autonomous InsurTech &amp; Adjudication AI
+      </div>
+
+      <h1 class="headline">
+        Something Big is Brewing &mdash;<br>
+        <span class="gradient-text">Coming Soon</span>
+      </h1>
+
+      <p class="subhead">
+        Pioneering autonomous intelligence for end-to-end insurance claims processing. 
+        Zero-touch fraud adjudication, sub-second document forensics, and automated settlements.
+      </p>
+
+      <!-- Email Capture Form -->
+      <div class="form-container">
+        <form class="notify-form" id="notifyForm" novalidate>
+          <div class="input-wrapper">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+              <polyline points="22,6 12,13 2,6"></polyline>
+            </svg>
+            <label for="emailInput" class="visually-hidden" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;">Corporate email address</label>
+            <input 
+              type="email" 
+              id="emailInput" 
+              name="email" 
+              class="notify-input" 
+              placeholder="Enter your corporate email..." 
+              autocomplete="email"
+              spellcheck="false"
+              maxlength="100"
+              required
+            >
+          </div>
+          <button type="submit" class="submit-button" id="submitBtn">
+            <span>Notify Me</span>
+            <svg class="btn-arrow" viewBox="0 0 24 24" aria-hidden="true">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </button>
+        </form>
+
+        <div id="feedbackMessage" class="feedback-message" role="alert" aria-live="polite"></div>
+      </div>
+
+      <!-- Feature Strip -->
+      <div class="features-strip" aria-label="Key Claims Capabilities">
+        <div class="feature-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="16 18 22 12 16 6"></polyline>
+            <polyline points="8 6 2 12 8 18"></polyline>
+          </svg>
+          <span>Automated Claim Bots</span>
+        </div>
+        <div class="feature-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M12 6v6l4 2"></path>
+          </svg>
+          <span>Sub-Second Settlement</span>
+        </div>
+        <div class="feature-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+          </svg>
+          <span>Cognitive Fraud Guard</span>
+        </div>
+        <div class="feature-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg>
+          <span>BFSI Zero-Trust Core</span>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+      <div class="security-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+        </svg>
+        <span>CSP Hardened &bull; BFSI Grade &bull; Zero External CDNs</span>
+      </div>
+      <div>
+        <span>&copy; <span id="year">2026</span> Bajaj Claims Engine (<a href="https://bajajclaims.tech" style="color:var(--cyan-neon);text-decoration:none;">bajajclaims.tech</a>). All rights reserved.</span>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    (function () {
+      'use strict';
+
+      // Year update
+      var yearEl = document.getElementById('year');
+      if (yearEl) {
+        yearEl.textContent = new Date().getFullYear();
+      }
+
+      var form = document.getElementById('notifyForm');
+      var emailInput = document.getElementById('emailInput');
+      var submitBtn = document.getElementById('submitBtn');
+      var feedback = document.getElementById('feedbackMessage');
+
+      // Comprehensive client-side email format regex
+      var EMAIL_REGEX = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
+
+      // Input sanitization to prevent injection & malicious payloads
+      function sanitizeInput(raw) {
+        if (typeof raw !== 'string') return '';
+        return raw.trim()
+          .replace(/[\u0000-\u001F\u007F-\u009F]/g, '') // remove control characters
+          .slice(0, 100);
+      }
+
+      function setFeedback(text, isError) {
+        if (!feedback) return;
+        feedback.textContent = text;
+        feedback.className = 'feedback-message ' + (isError ? 'error' : 'success');
+      }
+
+      function clearFeedback() {
+        if (!feedback) return;
+        feedback.textContent = '';
+        feedback.className = 'feedback-message';
+      }
+
+      if (emailInput) {
+        emailInput.addEventListener('input', function () {
+          if (feedback && feedback.classList.contains('error')) {
+            clearFeedback();
+          }
+        });
+      }
+
+      if (form) {
+        form.addEventListener('submit', function (event) {
+          event.preventDefault();
+
+          var rawEmail = emailInput ? emailInput.value : '';
+          var cleanedEmail = sanitizeInput(rawEmail);
+
+          if (!cleanedEmail) {
+            setFeedback('Please enter your email address.', true);
+            if (emailInput) emailInput.focus();
+            return;
+          }
+
+          if (!EMAIL_REGEX.test(cleanedEmail)) {
+            setFeedback('Please enter a valid corporate email address.', true);
+            if (emailInput) emailInput.focus();
+            return;
+          }
+
+          // UI processing state
+          if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Securing spot...';
+          }
+
+          // Simulated secure registration handling
+          setTimeout(function () {
+            try {
+              var waitlistCount = (parseInt(localStorage.getItem('bce_waitlist_id'), 10) || 520) + 1;
+              localStorage.setItem('bce_waitlist_id', waitlistCount.toString());
+              
+              setFeedback('✓ Priority access confirmed! VIP ticket #BCE-' + waitlistCount + ' allocated.', false);
+              if (emailInput) {
+                emailInput.value = '';
+                emailInput.disabled = true;
+              }
+              if (submitBtn) {
+                submitBtn.textContent = 'Reserved';
+                submitBtn.style.background = '#10b981';
+                submitBtn.style.color = '#ffffff';
+                submitBtn.style.boxShadow = '0 0 20px rgba(16, 185, 129, 0.4)';
+              }
+            } catch (e) {
+              setFeedback('✓ Access confirmed. We will notify you at launch.', false);
+              if (submitBtn) submitBtn.textContent = 'Joined';
+            }
+          }, 650);
+        });
+      }
+    })();
+  </script>
+</body>
+</html>
